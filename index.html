@@ -1,50 +1,185 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+    <title>reveal.js</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section data-background-image="/images/jwt_logo.png" data-background-position="center">
+            <h1>JWT</h1>
+        </section>
+        <section data-background-size="500px" data-background-image="/images/map.png" data-background-position="top">
+            <ul>
+                <li>Qu'est ce que JWT</li>
+                <li>Contenu d'un token</li>
+                <li>Signature vs chiffrement</li>
+                <li>retour d'expérience</li>
+            </ul>
+        </section>
+        <section>
+            <h1>C'est quoi ?</h1>
+            Un standard pour transmettre des assertions sécurisées standardisées ou non.<br/>
+            <img src="/images/standard.png" width="400" style="border: 0px">
+        </section>
+        <section>
+            <section>
+                <h1>Structure</h1>
+            </section>
+            <section data-markdown>
+                ```
+                eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9. //header
+                eyJCZW5qYW1pbiI6Ik1pcm9uZXIiLCJyb2xlcyI6WyJhZG1pbiJdfQ. //payload
+                KA_X8t0R2nL5Yzf7o8mbTTqo1KgIn45o97yBKOYvJ-g //signature
+                //variante de base64 + et - sont remplacés par _ et - = base64url
+                ```
+            </section>
+            <section data-markdown>
+                <h1>Header</h1>
+                ```
+                {"alg": "none"}
+                //eyJhbGciOiJub25lIn0 ```
+                ```
+                { "alg": "HS256", "typ": "JWT"}
+                // eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9
+                ```
+            </section>
+            <section>
+                <h1>Header :</h1>
+                <ul>
+                    <li>
+                        <b>alg</b> (requis) : algorithme utilisé pour signer et/ou décrypter le JWT (none, HS256...)
+                    </li>
+                    <li>
+                        <b>typ</b> (optionnel) : JWT par défaut
+                    </li>
+                </ul>
+            </section>
+            <section data-markdown>
+                <h1>Payload</h1>
+                ```
+                {
+                "sub": "1234567890", "name": "John Doe", "admin": true
+                }```
+            </section>
+            <section>
+                <h1>Payload </h1>
+                (Private vs Public)
+                <ul>
+                    <li>
+                        <b>iss</b> issuer : String ou URI
+                    </li>
+                    <li>
+                        <b>sub</b> subject : String ou URI, identifie de manière unique le contenu
+                    </li>
+                    <li>
+                        <b>aud</b> audience : String, URI ou array, application spécifique
+                    </li>
+                    <li>
+                        <b>exp</b> expiration : Number
+                    </li>
+                    <li>
+                        <b>nbf</b> not before : Number = opposé d'expiration
+                    </li>
+                    <li><b>iat</b> issued at : Number date de création</li>
+                </ul>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+            </section>
+            <section data-markdown>
+                <h1>Signature</h1>
+                <br/>
 
-		<script>
-			// More info https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				history: true,
+                ```
+                //header
+                eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.
+                //body
+                eyJCZW5qYW1pbiI6Ik1pcm9uZXIiLCJyb2xlcyI6WyJhZG1pbiJdfQ.
 
-				// More info https://github.com/hakimel/reveal.js#dependencies
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
+                //Plusieurs algorithmes disponibles
+
+                //HS256
+                KA_X8t0R2nL5Yzf7o8mbTTqo1KgIn45o97yBKOYvJ-g
+                //HS384
+                B7cBYO5qXbawh6thdTHhja1E8zTk8u-ztWL2c6Ny-GYEG849HionX_J1b2942aID
+                //HS512
+                rJN-bdDqRD5UUXvjMv-dVjnDLHSMFPgpa433iWx0xJmgjOlO-ywEDCh9KQMD1VY_PtnaXFc9sXD8iqLuZSAhTA
+                ```
+            </section>
+            <section>
+                <img src="/images/summary_jwt.jpg"><br/>
+                Notez que les clés des assertions sont petites de sorte d'avoir un JWT le plus compact possible.<br/>
+            </section>
+        </section>
+        <section>
+            <h1>Signature</h1>
+            <img src="/images/certified.png" style="border: 0px">
+            Etablir l'authenticité du JWT.<br/>
+            Que son contenu n'a pas été altéré.<br/>
+            Que toutes les contraintes (header + payload) sont respectées
+        </section>
+        <section>
+            <h1>Chiffrement</h1>
+            <img src="/images/enigma.jpg"  width="300px" style="border: 0px"><br/>
+            Garder le contenu non lisible pour des tiers
+        </section>
+        <section>
+            <h1>Retour d'expérience</h1>
+            <ul>
+                <li>Consommation par des mobiles</li>
+                <li>Intégration avec Angular</li>
+                <li>Tests d'intégration</li>
+                <li>Session client vs requête HTTP</li>
+            </ul>
+        </section>
+        <section>
+            <h1>Liens</h1>
+            <a href="jwt.io">jwt.io</a><br/>
+            <a href="https://auth0.com/e-books/jwt-handbook">JWT handbook</a>
+        </section>
+        <section data-background-image="https://media.giphy.com/media/5XRB3Ay93FZw4/giphy.gif">
+            <h1>¿ Questions ?</h1>
+        </section>
+    </div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        history: true,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {
+                src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            }
+        ]
+    });
+</script>
+</body>
 </html>

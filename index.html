@@ -30,14 +30,14 @@
         <section data-background-size="500px" data-background-image="./images/map.png" data-background-position="top">
             <ul>
                 <li>Qu'est ce que JWT</li>
-                <li>Contenu d'un token</li>
+                <li>Contenu</li>
                 <li>Signature vs chiffrement</li>
-                <li>retour d'expérience</li>
+                <li>Retour d'expérience</li>
             </ul>
         </section>
         <section>
             <h1>C'est quoi ?</h1>
-            Un standard pour transmettre des assertions sécurisées standardisées ou non.<br/>
+            Un <strong style="color: red">standard</strong> pour transmettre des clés/valeurs sécurisées standardisées ou non.<br/>
             <img src="./images/standard.png" width="400" style="border: 0px">
         </section>
         <section>
@@ -48,8 +48,13 @@
                 ```
                 eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9. //header
                 eyJCZW5qYW1pbiI6Ik1pcm9uZXIiLCJyb2xlcyI6WyJhZG1pbiJdfQ. //payload
-                KA_X8t0R2nL5Yzf7o8mbTTqo1KgIn45o97yBKOYvJ-g //signature
+                KA_X8t0R2nL5Yzf7o8mbTTqo1KgIn45o97yBKOYvJ-g" //signature
                 //variante de base64 + et - sont remplacés par _ et - = base64url
+                ```
+
+                ```
+                //exemple d'envoi du JWT
+                curl -H "Authorization: Bearer eyJ0eX...
                 ```
             </section>
             <section data-markdown>
@@ -82,7 +87,7 @@
             </section>
             <section>
                 <h1>Payload </h1>
-                (Private vs Public)
+                <strong style="color: red">Private</strong>  vs <strong style="color: lawngreen">Public</strong>
                 <ul>
                     <li>
                         <b>iss</b> issuer : String ou URI
@@ -131,22 +136,22 @@
         <section>
             <h1>Signature</h1>
             <img src="./images/certified.png" style="border: 0px">
-            Etablir l'authenticité du JWT.<br/>
-            Que son contenu n'a pas été altéré.<br/>
-            Que toutes les contraintes (header + payload) sont respectées
+            Etablir <strong style="color: red">l'authenticité</strong> du JWT.<br/>
+            Et que son contenu n'a pas été <strong style="color: red">altéré</strong>.<br/>
         </section>
         <section>
             <h1>Chiffrement</h1>
             <img src="./images/enigma.jpg"  width="300px" style="border: 0px"><br/>
-            Garder le contenu non lisible pour des tiers
+            Garder le contenu <strong style="color: red">non lisible</strong> pour des tiers
         </section>
         <section>
             <h1>Quand les utiliser ?</h1>
             <ul>
                 <li>Scalabilité horizontale : plus de sticky session</li>
                 <li>Pas un remplaçant de la session HTTP</li>
-                <li>Ils prennent de la place</li>
+                <li>Ils prennent de la place (base64)</li>
                 <li>Invalidation des tokens difficile</li>
+                <li>Stockage d'une valeur dans JWT ou appel BDD ?</li>
             </ul>
         </section>
         <section>
